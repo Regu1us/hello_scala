@@ -1,38 +1,46 @@
 import scala.collection.mutable.ArrayBuffer
 
-object Factorization { 
+class APoint(val x: Int, val y:  Int) {
+    def +(ap: APoint): APoint = {
+        new APoint(x + ap.x, y + ap.y)
+    }
+    override def toString(): String = "(" + x + ", " + y + ")"
+}
+
+object hello_scala { 
     def main(args: Array[String]): Unit = {
-        val random = scala.util.Random
-        val numbers =
-            if (args.isEmpty) {
-                (1 to 10).map(i => random.nextInt(Int.MaxValue))
-            } else {
-                args.map(i => i.toInt).to[collection.immutable.Seq]
-            }
-        logProcessingTime("Serial ", numbers.map(i => factorize(i)))
-        logProcessingTime("Parallel", numbers.par.map(i => factorize(i)))
+        myPrint("Hello Scala!")
+        args.foreach(whilePrint)       
+        val lst = List("A", "BC", "C")
+        matchList(lst)
+        
+        val ap1 = new APoint(1, 1)
+        val ap2 = new APoint(2, 3)
+        println(ap1 + ap2)
     }
 
-    private def factorize(number : Int) : List[Int] = {
-        val list = new ArrayBuffer[Int]
-        var n = number
-        var f = 2
+    private def myPrint(str: String): Unit = {
+        println(str)
+    }
 
-        while (n != 1) {
-            if (n % f == 0) {
-                list += f
-                n /= f
-            } else {
-                f += 1
-            }
+    private def whilePrint(number: String): Unit = {
+        val max = number.toInt
+        var i = 0
+        while (i <= max) {
+            if (i != 0)
+                println(" ")
+            println(i)
+            i += 1
         }
-        println("Thread:%3d factorize %10d to %s".format(Thread.currentThread.getId, number, list.mkString(", ")))
-        list.toList
     }
 
-    private def logProcessingTime(label: String, process: => Unit) = {
-        val start = System.currentTimeMillis
-        process
-        println(label + ": " + (System.currentTimeMillis - start) + "ms")
+    private def matchList(lst: List[String]): Unit = {
+        lst match { 
+            case List("A", b, c) if b != "B" =>
+                println("b = " + b)
+                println("c = " + c)
+            case _ =>
+                println("nothing")
+        }
     }
 }
